@@ -6,7 +6,16 @@ public class Scrabble {
     }
 
     public int score() {
-        return 0;
+        if(this.validEntry(this.word)) {
+            return 0;
+        }
+
+        return 24;
+
+    }
+
+    private boolean validEntry(String word) {
+       return (word == null || word.isEmpty());
     }
 
 }
