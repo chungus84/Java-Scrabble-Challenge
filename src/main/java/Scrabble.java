@@ -46,10 +46,18 @@ public class Scrabble {
 
     public int score() {
         if(this.validEntry(this.word)) { return 0; }
-//        return scoreHash.get(this.word.toUpperCase());
-        return scoreHash.get(Character.toUpperCase(this.word.charAt(0)));
+        return wordToScoreCalc(this.word);
 
 
+    }
+
+    public int wordToScoreCalc(String word) {
+        int totalScore = 0;
+        char[] charArray = word.toCharArray();
+        for (Character ch : charArray) {
+            totalScore += scoreHash.get(Character.toUpperCase(ch));
+        }
+        return totalScore;
     }
 
     private boolean validEntry(String word) {
