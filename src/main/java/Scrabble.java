@@ -53,9 +53,9 @@ public class Scrabble {
 
     public int wordToScoreCalc(String word) {
         int totalScore = 0;
-        char[] charArray = word.toCharArray();
+        char[] charArray = word.toUpperCase().toCharArray();
         for (Character ch : charArray) {
-            totalScore += scoreHash.get(Character.toUpperCase(ch));
+            totalScore += scoreHash.get(ch);
         }
         return totalScore;
     }
