@@ -42,7 +42,7 @@ public class ScrabbleTest {
     }
 
     @Test
-    @Disabled
+//    @Disabled
     public void returnsScoreForComplicatedWord() {
         Scrabble scrabble = new Scrabble("quirky");
         assertEquals(scrabble.score(), 22);
