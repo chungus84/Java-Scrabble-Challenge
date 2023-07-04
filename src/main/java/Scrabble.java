@@ -3,6 +3,11 @@ import java.util.HashMap;
 public class Scrabble {
 
     private String word;
+    private Character[] doubleLetter;
+    private Character[] tripleLetter;
+    private boolean doubleWord;
+    private boolean tripleWord;
+    private int totalScore = 0;
     private static final HashMap<Character, Integer> scoreHash;
 
     static {
@@ -43,15 +48,25 @@ public class Scrabble {
 
     }
 
+    // Scrabble (String, Character[], Character[], boolean (doubleWord), boolean(tripleWord);
+    public Scrabble(String userWord, Character[] doubleLetter, Character[] tripleLetter, boolean doubleWord, boolean tripleWord) {
+        this.word = userWord;
+        this.doubleLetter = doubleLetter;
+        this.tripleLetter = tripleLetter;
+        this.doubleWord = doubleWord;
+        this.tripleWord = tripleWord;
+    }
+
 
     public int score() {
-        if(this.validEntry(this.word)) { return 0; }
-        return wordToScoreCalc(this.word);
-
+        if(this.validEntry(this.word)) { return totalScore; }
+        totalScore += wordToScoreCalc(this.word);
+        doubleAndTripleWordCalc();
+        return totalScore;
 
     }
 
-    public int wordToScoreCalc(String word) {
+    private int wordToScoreCalc(String word) {
         int totalScore = 0;
         char[] charArray = word.toUpperCase().toCharArray();
         for (Character ch : charArray) {
@@ -59,6 +74,13 @@ public class Scrabble {
         }
         return totalScore;
     }
+
+    private void doubleAndTripleWordCalc() {
+        if(this.doubleWord) { this.totalScore *= 2;}
+        if(this.tripleWord) { this.totalScore *= 3;}
+    }
+
+
 
     private boolean validEntry(String word) {
        return (word == null || word.isEmpty());
