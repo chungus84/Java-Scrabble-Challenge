@@ -79,7 +79,7 @@ public class ScrabbleTest {
     }
 
     @Test
-    @Disabled
+//    @Disabled
     public void returnsScoreForDoubleLetterOnlyOnce() {
         Scrabble scrabble = new Scrabble("aa", new Character[]{'A'}, new Character[]{}, false, false);
         assertEquals(scrabble.score(), 3);
