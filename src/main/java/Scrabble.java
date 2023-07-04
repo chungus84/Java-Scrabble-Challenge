@@ -81,11 +81,15 @@ public class Scrabble {
         if(this.tripleWord) { this.totalScore *= 3;}
     }
 
-    private void doubleLetterScore() {
+    private void doubleAndTripleLetterScore() {
         String wordToCheck = this.word.toUpperCase();
         if (this.doubleLetter.length > 0 && wordToCheck.contains(Character.toString(this.doubleLetter[0]))) {
             totalScore += scoreHash.get(this.doubleLetter[0]);
         }
+        if (this.tripleLetter.length > 0 && wordToCheck.contains(Character.toString(this.tripleLetter[0]))) {
+            totalScore += scoreHash.get(this.tripleLetter[0]) * 2;
+        }
+
 
 
 
@@ -97,7 +101,7 @@ public class Scrabble {
 
     private void checkScoreModifyers() {
         if (this.doubleWord || this.tripleWord) { doubleAndTripleWordCalc();}
-        if (this.doubleLetter != null) { doubleLetterScore();}
+        if (this.doubleLetter != null || this.tripleLetter != null) { doubleAndTripleLetterScore();}
     }
 
     private boolean validEntry(String word) {
