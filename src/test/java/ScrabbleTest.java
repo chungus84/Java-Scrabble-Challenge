@@ -65,7 +65,7 @@ public class ScrabbleTest {
     }
 
     @Test
-    @Disabled
+//    @Disabled
     public void returnsScoreForTripleWord() {
         Scrabble scrabble = new Scrabble("quirky", new Character[]{}, new Character[]{}, false, true);
         assertEquals(scrabble.score(), 66);
