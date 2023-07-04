@@ -3,11 +3,12 @@ import java.util.HashMap;
 
 public class Scrabble {
 
-    private String word;
-    private Character[] doubleLetter;
-    private Character[] tripleLetter;
-    private boolean doubleWord;
-    private boolean tripleWord;
+    private final String word;
+    private final Character[] doubleLetter;
+    private final Character[] tripleLetter;
+    private final boolean doubleWord;
+    private final boolean tripleWord;
+    private final String wordUpper;
     private int totalScore = 0;
     private static final HashMap<Character, Integer> scoreHash;
 
@@ -39,8 +40,6 @@ public class Scrabble {
         scoreHash.put('X', 8);
         scoreHash.put('Q', 10);
         scoreHash.put('Z', 10);
-        scoreHash.put(null, 0);
-
     }
 
     public Scrabble(String userWord) {
@@ -49,6 +48,7 @@ public class Scrabble {
         this.tripleLetter = null;
         this.doubleWord = false;
         this.tripleWord = false;
+        this.wordUpper = this.wordToUpper();
     }
 
     // Scrabble (String, Character[], Character[], boolean (doubleWord), boolean(tripleWord);
@@ -58,22 +58,26 @@ public class Scrabble {
         this.tripleLetter = tripleLetter;
         this.doubleWord = doubleWord;
         this.tripleWord = tripleWord;
+        this.wordUpper = this.wordToUpper();
+    }
+
+    private String wordToUpper() {
+        if (this.word != null) { return this.word.toUpperCase();}
+        return "";
     }
 
     public int score() {
-        if(this.validEntry(this.word)) { return totalScore; }
+        if(this.validEntry()) { return totalScore; }
         wordToScoreCalc();
         checkScoreModifyers();
-
         return totalScore;
     }
 
-    private int wordToScoreCalc() {
-        char[] charArray = this.word.toUpperCase().toCharArray();
+    private void wordToScoreCalc() {
+        char[] charArray = this.wordUpper.toCharArray();
         for (Character ch : charArray) {
-            totalScore += scoreHash.get(Character.toUpperCase(ch));
+            totalScore += scoreHash.get(ch);
         }
-        return totalScore;
     }
 
     private void doubleAndTripleWordCalc() {
@@ -82,21 +86,12 @@ public class Scrabble {
     }
 
     private void doubleAndTripleLetterScore() {
-        String wordToCheck = this.word.toUpperCase();
-        if (this.doubleLetter.length > 0 && wordToCheck.contains(Character.toString(this.doubleLetter[0]))) {
+        if (this.doubleLetter.length > 0 && this.wordUpper.contains(Character.toString(this.doubleLetter[0]))) {
             totalScore += scoreHash.get(this.doubleLetter[0]);
         }
-        if (this.tripleLetter.length > 0 && wordToCheck.contains(Character.toString(this.tripleLetter[0]))) {
+        if (this.tripleLetter.length > 0 && this.wordUpper.contains(Character.toString(this.tripleLetter[0]))) {
             totalScore += scoreHash.get(this.tripleLetter[0]) * 2;
         }
-
-
-
-
-//        for(Character ch : this.doubleLetter) {
-//            if (wordToCheck.contains(Character.toString(ch))) { totalScore += scoreHash.get(ch);}
-//        }
-
     }
 
     private void checkScoreModifyers() {
@@ -104,8 +99,12 @@ public class Scrabble {
         if (this.doubleLetter != null || this.tripleLetter != null) { doubleAndTripleLetterScore();}
     }
 
-    private boolean validEntry(String word) {
-       return (word == null || word.isEmpty());
+    private boolean validEntry() {
+       return (this.word == null || this.word.isEmpty());
+    }
+
+    public static void main(String[] args) {
+
     }
 
 }
