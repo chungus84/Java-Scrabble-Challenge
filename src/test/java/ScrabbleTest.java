@@ -94,7 +94,7 @@ public class ScrabbleTest {
     }
 
     @Test
-    @Disabled
+//    @Disabled
     public void returnsScoreForTripleLetterOnlyOnce() {
         Scrabble scrabble = new Scrabble("aa", new Character[]{}, new Character[]{'A'},false, false);
         assertEquals(scrabble.score(), 4);
