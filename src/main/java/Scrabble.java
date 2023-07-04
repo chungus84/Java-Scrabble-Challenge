@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Scrabble {
@@ -38,14 +39,16 @@ public class Scrabble {
         scoreHash.put('X', 8);
         scoreHash.put('Q', 10);
         scoreHash.put('Z', 10);
-
-
+        scoreHash.put(null, 0);
 
     }
 
     public Scrabble(String userWord) {
         this.word = userWord;
-
+        this.doubleLetter = null;
+        this.tripleLetter = null;
+        this.doubleWord = false;
+        this.tripleWord = false;
     }
 
     // Scrabble (String, Character[], Character[], boolean (doubleWord), boolean(tripleWord);
@@ -57,20 +60,18 @@ public class Scrabble {
         this.tripleWord = tripleWord;
     }
 
-
     public int score() {
         if(this.validEntry(this.word)) { return totalScore; }
-        totalScore += wordToScoreCalc(this.word);
-        doubleAndTripleWordCalc();
-        return totalScore;
+        wordToScoreCalc();
+        checkScoreModifyers();
 
+        return totalScore;
     }
 
-    private int wordToScoreCalc(String word) {
-        int totalScore = 0;
-        char[] charArray = word.toUpperCase().toCharArray();
+    private int wordToScoreCalc() {
+        char[] charArray = this.word.toUpperCase().toCharArray();
         for (Character ch : charArray) {
-            totalScore += scoreHash.get(ch);
+            totalScore += scoreHash.get(Character.toUpperCase(ch));
         }
         return totalScore;
     }
@@ -80,7 +81,24 @@ public class Scrabble {
         if(this.tripleWord) { this.totalScore *= 3;}
     }
 
+    private void doubleLetterScore() {
+        String wordToCheck = this.word.toUpperCase();
+        if (this.doubleLetter.length > 0 && wordToCheck.contains(Character.toString(this.doubleLetter[0]))) {
+            totalScore += scoreHash.get(this.doubleLetter[0]);
+        }
 
+
+
+//        for(Character ch : this.doubleLetter) {
+//            if (wordToCheck.contains(Character.toString(ch))) { totalScore += scoreHash.get(ch);}
+//        }
+
+    }
+
+    private void checkScoreModifyers() {
+        if (this.doubleWord || this.tripleWord) { doubleAndTripleWordCalc();}
+        if (this.doubleLetter != null) { doubleLetterScore();}
+    }
 
     private boolean validEntry(String word) {
        return (word == null || word.isEmpty());

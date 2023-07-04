@@ -72,7 +72,7 @@ public class ScrabbleTest {
     }
     // Scrabble (String, Character[] (double letters), Character[], boolean, boolean);
     @Test
-    @Disabled
+//    @Disabled
     public void returnsScoreForDoubleLetterWord() {
         Scrabble scrabble = new Scrabble("a", new Character[]{'A'}, new Character[]{}, false, false);
         assertEquals(scrabble.score(), 2);
