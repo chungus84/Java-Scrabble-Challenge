@@ -1,15 +1,17 @@
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Scrabble {
 
     private final String word;
-    private final Character[] doubleLetter;
-    private final Character[] tripleLetter;
+    private ArrayList<Character> doubleLetter;
+    private ArrayList<Character> tripleLetter;
     private final boolean doubleWord;
     private final boolean tripleWord;
-    private final String wordUpper;
     private int totalScore = 0;
+
+    private ArrayList<String> wordArray;
     private static final HashMap<Character, Integer> scoreHash;
 
     static {
@@ -43,38 +45,45 @@ public class Scrabble {
     }
 
     public Scrabble(String userWord) {
-        this.word = userWord;
+        this.word = this.wordToUpper(userWord);
         this.doubleLetter = null;
         this.tripleLetter = null;
         this.doubleWord = false;
         this.tripleWord = false;
-        this.wordUpper = this.wordToUpper();
+        this.wordArray = this.convertWordToArrayList();
     }
 
-    // Scrabble (String, Character[], Character[], boolean (doubleWord), boolean(tripleWord);
+
     public Scrabble(String userWord, Character[] doubleLetter, Character[] tripleLetter, boolean doubleWord, boolean tripleWord) {
-        this.word = userWord;
-        this.doubleLetter = doubleLetter;
-        this.tripleLetter = tripleLetter;
+        this.word = this.wordToUpper(userWord) ;
+        this.doubleLetter = new ArrayList<>(Arrays.asList(doubleLetter));
+        this.tripleLetter = new ArrayList<>(Arrays.asList(tripleLetter));
         this.doubleWord = doubleWord;
         this.tripleWord = tripleWord;
-        this.wordUpper = this.wordToUpper();
+        this.wordArray = this.convertWordToArrayList();
     }
 
-    private String wordToUpper() {
-        if (this.word != null) { return this.word.toUpperCase();}
-        return "";
+
+    private String wordToUpper(String word) {
+        if (word != null) { return word.toUpperCase();}
+        return null;
+    }
+
+    private ArrayList<String> convertWordToArrayList() {
+        if (this.word == null) { return null;}
+        String[] wordArr = this.word.split("");
+        return new ArrayList<>(Arrays.asList(wordArr));
     }
 
     public int score() {
-        if(this.validEntry()) { return totalScore; }
+        if(this.invalidEntry()) { return totalScore; }
         wordToScoreCalc();
         checkScoreModifyers();
         return totalScore;
     }
 
     private void wordToScoreCalc() {
-        char[] charArray = this.wordUpper.toCharArray();
+        char[] charArray = this.word.toCharArray();
         for (Character ch : charArray) {
             totalScore += scoreHash.get(ch);
         }
@@ -85,12 +94,28 @@ public class Scrabble {
         if(this.tripleWord) { this.totalScore *= 3;}
     }
 
-    private void doubleAndTripleLetterScore() {
-        if (this.doubleLetter.length > 0 && this.wordUpper.contains(Character.toString(this.doubleLetter[0]))) {
-            totalScore += scoreHash.get(this.doubleLetter[0]);
+    private int addScoreForDoubleAndTripleLetters(ArrayList letterArrayList) {
+        int modifyScore = 0;
+        for (Object letter : letterArrayList) {
+            modifyScore += checkLetterInWordAndReturnScore(letter);
+            this.wordArray.remove(letter);
+            }
+        return modifyScore;
+    }
+
+    private int checkLetterInWordAndReturnScore(Object letter) {
+        if(this.wordArray.contains(letter.toString())) {
+            return scoreHash.get(letter);
         }
-        if (this.tripleLetter.length > 0 && this.wordUpper.contains(Character.toString(this.tripleLetter[0]))) {
-            totalScore += scoreHash.get(this.tripleLetter[0]) * 2;
+        return 0;
+    }
+
+    private void doubleAndTripleLetterScore() {
+        if (this.doubleLetter.size() > 0) {
+            totalScore += this.addScoreForDoubleAndTripleLetters(this.doubleLetter);
+        }
+        if (this.tripleLetter.size() > 0) {
+            totalScore += ((this.addScoreForDoubleAndTripleLetters(this.tripleLetter)) * 2 );
         }
     }
 
@@ -99,12 +124,17 @@ public class Scrabble {
         if (this.doubleLetter != null || this.tripleLetter != null) { doubleAndTripleLetterScore();}
     }
 
-    private boolean validEntry() {
+    private boolean invalidEntry() {
        return (this.word == null || this.word.isEmpty());
     }
 
     public static void main(String[] args) {
 
+        Scrabble test2DoubleLettersShouldReturnScoreOf8 = new Scrabble("mean", new Character[]{'E','A'}, new Character[]{}, false, false);
+        System.out.println("word mean with 'e' and 'a' being double letter scores returns a score of: " + test2DoubleLettersShouldReturnScoreOf8.score());
+
+        Scrabble test2TripleLettersShouldReturnScoreOf10 = new Scrabble("mean", new Character[]{}, new Character[]{'E','A'}, false, false);
+        System.out.println("word mean with 'e' and 'a' being triple letter scores returns a score of: " + test2TripleLettersShouldReturnScoreOf10.score());
     }
 
 }
