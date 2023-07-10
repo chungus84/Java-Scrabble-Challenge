@@ -5,12 +5,11 @@ import java.util.ArrayList;
 public class Scrabble {
 
     private final String word;
-    private ArrayList<Character> doubleLetter;
-    private ArrayList<Character> tripleLetter;
+    private Character[] doubleLetter;
+    private Character[] tripleLetter;
     private final boolean doubleWord;
     private final boolean tripleWord;
     private int totalScore = 0;
-
     private ArrayList<String> wordArray;
     private static final HashMap<Character, Integer> scoreHash;
 
@@ -56,8 +55,8 @@ public class Scrabble {
 
     public Scrabble(String userWord, Character[] doubleLetter, Character[] tripleLetter, boolean doubleWord, boolean tripleWord) {
         this.word = this.wordToUpper(userWord) ;
-        this.doubleLetter = new ArrayList<>(Arrays.asList(doubleLetter));
-        this.tripleLetter = new ArrayList<>(Arrays.asList(tripleLetter));
+        this.doubleLetter = doubleLetter;
+        this.tripleLetter = tripleLetter;
         this.doubleWord = doubleWord;
         this.tripleWord = tripleWord;
         this.wordArray = this.convertWordToArrayList();
@@ -94,7 +93,7 @@ public class Scrabble {
         if(this.tripleWord) { this.totalScore *= 3;}
     }
 
-    private int addScoreForDoubleAndTripleLetters(ArrayList letterArrayList) {
+    private int addScoreForDoubleAndTripleLetters(Character[] letterArrayList) {
         int modifyScore = 0;
         for (Object letter : letterArrayList) {
             modifyScore += checkLetterInWordAndReturnScore(letter);
@@ -111,10 +110,10 @@ public class Scrabble {
     }
 
     private void doubleAndTripleLetterScore() {
-        if (this.doubleLetter.size() > 0) {
+        if (this.doubleLetter.length > 0) {
             totalScore += this.addScoreForDoubleAndTripleLetters(this.doubleLetter);
         }
-        if (this.tripleLetter.size() > 0) {
+        if (this.tripleLetter.length > 0) {
             totalScore += ((this.addScoreForDoubleAndTripleLetters(this.tripleLetter)) * 2 );
         }
     }
