@@ -82,9 +82,9 @@ public class Scrabble {
         if(this.tripleWord) { this.totalScore *= 3;}
     }
 
-    private int addScoreForDoubleAndTripleLetters(Character[] letterArrayList) {
+    private int addScoreForDoubleAndTripleLetters(Character[] letterArray) {
         int modifyScore = 0;
-        for (Object letter : letterArrayList) {
+        for (Object letter : letterArray) {
             modifyScore += checkLetterInWordAndReturnScore(letter);
             this.word.remove(letter);
             }
