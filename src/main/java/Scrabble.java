@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 public class Scrabble {
 
-    private final String word;
+    private ArrayList<String> word;
     private Character[] doubleLetter;
     private Character[] tripleLetter;
     private final boolean doubleWord;
     private final boolean tripleWord;
     private int totalScore = 0;
-    private ArrayList<String> wordArray;
     private static final HashMap<Character, Integer> scoreHash;
 
     static {
@@ -44,33 +43,24 @@ public class Scrabble {
     }
 
     public Scrabble(String userWord) {
-        this.word = this.wordToUpper(userWord);
+        this.word = this.convertWordToArrayList(userWord);
         this.doubleLetter = null;
         this.tripleLetter = null;
         this.doubleWord = false;
         this.tripleWord = false;
-        this.wordArray = this.convertWordToArrayList();
     }
 
-
     public Scrabble(String userWord, Character[] doubleLetter, Character[] tripleLetter, boolean doubleWord, boolean tripleWord) {
-        this.word = this.wordToUpper(userWord) ;
+        this.word = this.convertWordToArrayList(userWord) ;
         this.doubleLetter = doubleLetter;
         this.tripleLetter = tripleLetter;
         this.doubleWord = doubleWord;
         this.tripleWord = tripleWord;
-        this.wordArray = this.convertWordToArrayList();
     }
 
-
-    private String wordToUpper(String word) {
-        if (word != null) { return word.toUpperCase();}
-        return null;
-    }
-
-    private ArrayList<String> convertWordToArrayList() {
-        if (this.word == null) { return null;}
-        String[] wordArr = this.word.split("");
+    private ArrayList<String> convertWordToArrayList(String word) {
+        if (word == null || word == "") { return null;}
+        String[] wordArr = word.toUpperCase().split("");
         return new ArrayList<>(Arrays.asList(wordArr));
     }
 
@@ -81,10 +71,9 @@ public class Scrabble {
         return totalScore;
     }
 
-    private void wordToScoreCalc() {
-        char[] charArray = this.word.toCharArray();
-        for (Character ch : charArray) {
-            totalScore += scoreHash.get(ch);
+    private void wordToScoreCalc() {;
+        for (String letter : this.word) {
+            totalScore += scoreHash.get(letter.charAt(0));
         }
     }
 
@@ -97,13 +86,13 @@ public class Scrabble {
         int modifyScore = 0;
         for (Object letter : letterArrayList) {
             modifyScore += checkLetterInWordAndReturnScore(letter);
-            this.wordArray.remove(letter);
+            this.word.remove(letter);
             }
         return modifyScore;
     }
 
     private int checkLetterInWordAndReturnScore(Object letter) {
-        if(this.wordArray.contains(letter.toString())) {
+        if(this.word.contains(letter.toString())) {
             return scoreHash.get(letter);
         }
         return 0;
@@ -124,7 +113,7 @@ public class Scrabble {
     }
 
     private boolean invalidEntry() {
-       return (this.word == null || this.word.isEmpty());
+       return (this.word == null || this.word.size() == 0);
     }
 
     public static void main(String[] args) {
