@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Scrabble {
 
     private ArrayList<String> word;
-    private Character[] doubleLetter;
-    private Character[] tripleLetter;
+    private final Character[] doubleLetter;
+    private final Character[] tripleLetter;
     private final boolean doubleWord;
     private final boolean tripleWord;
     private int totalScore = 0;
